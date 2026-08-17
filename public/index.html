@@ -259,6 +259,7 @@
         .badge-login { background-color: #dcfce7; color: #166534; }
         .badge-call { background-color: #e0f2fe; color: #0369a1; }
         .badge-break { background-color: #fef3c7; color: #92400e; }
+        .badge-logout { background-color: #f1f5f9; color: #64748b; }
 
         .action-btns {
             display: flex;
@@ -511,7 +512,6 @@
             return JSON.parse(stored);
         }
 
-        // URL ke hash ya state ke hisaab se page route karna
         window.onload = function() {
             checkRoute();
         };
@@ -522,7 +522,8 @@
 
         function checkRoute() {
             let hash = window.location.hash;
-            let role = localStorage.getItem('mhh_logged_role');
+            let adminLoggedIn = localStorage.getItem('mhh_admin_logged') === 'true';
+            let agentLoggedIn = localStorage.getItem('mhh_agent_logged') === 'true';
 
             // Hide all sections first
             document.getElementById('admin-login-section').style.display = 'none';
@@ -531,21 +532,20 @@
             document.getElementById('agent-dashboard-section').style.display = 'none';
 
             if (hash === '#admin') {
-                if (role === 'admin') {
+                if (adminLoggedIn) {
                     document.getElementById('admin-dashboard-section').style.display = 'block';
                     renderAdminDashboard();
                 } else {
                     document.getElementById('admin-login-section').style.display = 'flex';
                 }
             } else if (hash === '#agent') {
-                if (role === 'agent') {
+                if (agentLoggedIn) {
                     document.getElementById('agent-dashboard-section').style.display = 'block';
                     loadAgentWorkspace();
                 } else {
                     document.getElementById('agent-login-section').style.display = 'flex';
                 }
             } else {
-                // Default agar URL mein kuch na ho toh admin login dikhayein aur hash #admin set kardein
                 window.location.hash = 'admin';
             }
         }
@@ -555,7 +555,7 @@
             const u = document.getElementById('adminUser').value.trim();
             const p = document.getElementById('adminPass').value.trim();
             if (u === 'admin' && p === 'password') {
-                localStorage.setItem('mhh_logged_role', 'admin');
+                localStorage.setItem('mhh_admin_logged', 'true');
                 checkRoute();
             } else {
                 alert("Invalid Admin Username or Password! (Use admin / password)");
@@ -571,14 +571,12 @@
             let agent = agents.find(a => (a.username === inputUser || a.id === inputUser) && a.password === inputPass);
 
             if (agent) {
-                if(!agent.loginTime || agent.status === 'Logged Out') {
-                    let now = new Date();
-                    agent.loginTime = now.toLocaleDateString() + ' ' + now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-                    agent.status = 'Free / Available';
-                    localStorage.setItem('mhh_agents', JSON.stringify(agents));
-                }
+                let now = new Date();
+                agent.loginTime = now.toLocaleDateString() + ' ' + now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                agent.status = 'Free / Available';
+                localStorage.setItem('mhh_agents', JSON.stringify(agents));
 
-                localStorage.setItem('mhh_logged_role', 'agent');
+                localStorage.setItem('mhh_agent_logged', 'true');
                 localStorage.setItem('mhh_current_agent_id', agent.id);
                 checkRoute();
             } else {
@@ -587,9 +585,8 @@
         }
 
         function handleLogout() {
-            let role = localStorage.getItem('mhh_logged_role');
             let hash = window.location.hash;
-            if (role === 'agent') {
+            if (hash === '#agent') {
                 let agentId = localStorage.getItem('mhh_current_agent_id');
                 let agents = getStoredAgents();
                 let agent = agents.find(a => a.id === agentId);
@@ -597,9 +594,11 @@
                     agent.status = 'Logged Out';
                     localStorage.setItem('mhh_agents', JSON.stringify(agents));
                 }
+                localStorage.removeItem('mhh_agent_logged');
+                localStorage.removeItem('mhh_current_agent_id');
+            } else if (hash === '#admin') {
+                localStorage.removeItem('mhh_admin_logged');
             }
-            localStorage.removeItem('mhh_logged_role');
-            localStorage.removeItem('mhh_current_agent_id');
             checkRoute();
         }
 
@@ -610,7 +609,7 @@
 
             if (agent) {
                 document.getElementById('lblAgentName').innerText = agent.name;
-                document.getElementById('lblLoginTime').innerText = agent.loginTime || '25/07/2026 10:01';
+                document.getElementById('lblLoginTime').innerText = agent.loginTime || '-';
                 document.getElementById('lblAgentId').innerText = agent.id;
                 document.getElementById('lblAgentStatus').innerText = agent.status;
                 document.getElementById('statTotalCalls').innerText = agent.totalCalls || 0;
@@ -649,6 +648,7 @@
                 let badge = 'badge-login';
                 if(agent.status === 'On Break') badge = 'badge-break';
                 if(agent.status === 'Busy') badge = 'badge-busy';
+                if(agent.status === 'Logged Out') badge = 'badge-logout';
 
                 tbody.innerHTML += `
                     <tr>
