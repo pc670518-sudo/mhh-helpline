@@ -128,6 +128,19 @@
             background-color: var(--primary-dark);
         }
 
+        .forgot-password-link {
+            display: block;
+            margin-top: 14px;
+            font-size: 13px;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .forgot-password-link:hover {
+            text-decoration: underline;
+        }
+
         /* --- DASHBOARD SECTION --- */
         #dashboard-section {
             display: none;
@@ -324,6 +337,7 @@
                     <input type="password" id="password" placeholder="Enter password" required autocomplete="new-password">
                 </div>
                 <button type="submit" class="btn">Log in</button>
+                <a href="#" class="forgot-password-link" onclick="handleForgotPassword(event)">Forgot Password?</a>
             </form>
         </div>
     </div>
@@ -614,6 +628,22 @@
             document.getElementById('login-section').style.display = 'flex';
         }
 
+        function handleForgotPassword(event) {
+            event.preventDefault();
+            const inputUser = prompt("Enter your admin username to reset password:");
+            if (inputUser !== null && inputUser.trim() !== "") {
+                if (inputUser.trim() === currentAdminUser) {
+                    const newPass = prompt("Username verified! Enter your new password:");
+                    if (newPass !== null && newPass.trim() !== "") {
+                        currentAdminPass = newPass.trim();
+                        alert("Password successfully reset! You can now log in with your new password.");
+                    }
+                } else {
+                    alert("Entered username does not match our admin record!");
+                }
+            }
+        }
+
         function openAdminSettings() {
             const newUser = prompt("Enter new Admin Username:", currentAdminUser);
             if (newUser !== null && newUser.trim() !== "") {
@@ -635,7 +665,6 @@
 
             let agents = getStoredAgents();
 
-            // Check if ID already exists
             if(agents.some(a => a.id === agentId)) {
                 alert("Agent ID already exists! Please use a unique ID.");
                 return;
