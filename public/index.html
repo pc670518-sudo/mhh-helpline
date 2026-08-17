@@ -555,8 +555,27 @@
     </div>
 
     <script>
-        let currentAdminUser = "admin";
-        let currentAdminPass = "password";
+        // Check login persistence on startup
+        window.onload = function() {
+            let isLoggedIn = localStorage.getItem('mhh_is_logged_in');
+            if (isLoggedIn === 'true') {
+                document.getElementById('login-section').style.display = 'none';
+                document.getElementById('dashboard-section').style.display = 'block';
+            }
+            renderAgents();
+        };
+
+        function getStoredCredentials() {
+            let user = localStorage.getItem('mhh_admin_user');
+            let pass = localStorage.getItem('mhh_admin_pass');
+            if (!user || !pass) {
+                user = "admin";
+                pass = "password";
+                localStorage.setItem('mhh_admin_user', user);
+                localStorage.setItem('mhh_admin_pass', pass);
+            }
+            return { user, pass };
+        }
 
         // Initial default agents
         let defaultAgents = [
@@ -566,7 +585,6 @@
             { id: '2006', name: 'Kajal', company: 'MHH Helpline', username: 'kajal2006', status: 'Available', badgeClass: 'badge' }
         ];
 
-        // Load agents from localStorage on startup
         function getStoredAgents() {
             let stored = localStorage.getItem('mhh_agents');
             if (!stored) {
@@ -578,6 +596,7 @@
 
         function renderAgents() {
             const tbody = document.getElementById('live-agents-tbody');
+            if (!tbody) return;
             tbody.innerHTML = '';
             let agents = getStoredAgents();
 
@@ -605,17 +624,15 @@
             });
         }
 
-        // Render agents when page loads
-        window.onload = function() {
-            renderAgents();
-        };
-
         function handleLogin(event) {
             event.preventDefault();
-            const user = document.getElementById('username').value;
-            const pass = document.getElementById('password').value;
+            const inputUser = document.getElementById('username').value.trim();
+            const inputPass = document.getElementById('password').value.trim();
 
-            if(user === currentAdminUser && pass === currentAdminPass) {
+            let creds = getStoredCredentials();
+
+            if(inputUser === creds.user && inputPass === creds.pass) {
+                localStorage.setItem('mhh_is_logged_in', 'true');
                 document.getElementById('login-section').style.display = 'none';
                 document.getElementById('dashboard-section').style.display = 'block';
             } else {
@@ -624,18 +641,20 @@
         }
 
         function handleLogout() {
+            localStorage.setItem('mhh_is_logged_in', 'false');
             document.getElementById('dashboard-section').style.display = 'none';
             document.getElementById('login-section').style.display = 'flex';
         }
 
         function handleForgotPassword(event) {
             event.preventDefault();
+            let creds = getStoredCredentials();
             const inputUser = prompt("Enter your admin username to reset password:");
             if (inputUser !== null && inputUser.trim() !== "") {
-                if (inputUser.trim() === currentAdminUser) {
+                if (inputUser.trim() === creds.user) {
                     const newPass = prompt("Username verified! Enter your new password:");
                     if (newPass !== null && newPass.trim() !== "") {
-                        currentAdminPass = newPass.trim();
+                        localStorage.setItem('mhh_admin_pass', newPass.trim());
                         alert("Password successfully reset! You can now log in with your new password.");
                     }
                 } else {
@@ -645,12 +664,13 @@
         }
 
         function openAdminSettings() {
-            const newUser = prompt("Enter new Admin Username:", currentAdminUser);
+            let creds = getStoredCredentials();
+            const newUser = prompt("Enter new Admin Username:", creds.user);
             if (newUser !== null && newUser.trim() !== "") {
-                const newPass = prompt("Enter new Admin Password:", currentAdminPass);
+                const newPass = prompt("Enter new Admin Password:", creds.pass);
                 if (newPass !== null && newPass.trim() !== "") {
-                    currentAdminUser = newUser.trim();
-                    currentAdminPass = newPass.trim();
+                    localStorage.setItem('mhh_admin_user', newUser.trim());
+                    localStorage.setItem('mhh_admin_pass', newPass.trim());
                     alert("Admin credentials updated successfully! Please remember your new login details.");
                 }
             }
