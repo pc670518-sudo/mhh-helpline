@@ -7,6 +7,10 @@
     <style>
         body { font-family: Arial, sans-serif; background: #f4f7f6; margin: 0; padding: 20px; color: #333; }
         .header { display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 15px 25px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .logo-container { display: flex; align-items: center; gap: 15px; }
+        .logo-icon { width: 45px; height: 45px; background: #e3f2fd; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .logo-text h2 { margin: 0; font-size: 20px; color: #007bff; }
+        .logo-text p { margin: 2px 0 0 0; font-size: 12px; font-weight: bold; color: #666; text-transform: uppercase; letter-spacing: 0.5px; }
         .logout-btn { background: #ff4d4d; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: bold; }
         .logout-btn:hover { background: #cc0000; }
         .card { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px; }
@@ -23,9 +27,12 @@
 <body>
 
     <div class="header">
-        <div>
-            <h2>Mental Health Helpline</h2>
-            <h3 style="margin: 0; color: #555;">Agent Dashboard</h3>
+        <div class="logo-container">
+            <div class="logo-icon">🧠</div>
+            <div class="logo-text">
+                <h2>Mental Health Helpline</h2>
+                <p>Agent Dashboard</p>
+            </div>
         </div>
         <button class="logout-btn" onclick="logoutAgent()">Logout</button>
     </div>
@@ -72,7 +79,6 @@
     </div>
 
     <script>
-        // Set initial login time if not present
         if (!localStorage.getItem('agentLoginTime')) {
             const now = new Date();
             const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' ' + now.toLocaleDateString();
@@ -91,7 +97,6 @@
             localStorage.setItem('activeAgentData', JSON.stringify(agentData));
         }
 
-        // Initial sync
         syncToAdmin('Active / Available');
 
         function togglePreview() {
@@ -119,7 +124,7 @@
             syncToAdmin('Logged Out');
             localStorage.removeItem('agentLoginTime');
             alert('Agent Logged Out Successfully');
-            window.location.href = 'index.html'; // or login page
+            window.location.href = 'index.html';
         }
     </script>
 </body>
