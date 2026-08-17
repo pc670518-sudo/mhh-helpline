@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mental Health Helpline - Portal</title>
+    <title>Mental Health Helpline - Admin Dashboard</title>
     <style>
         :root {
             --primary-color: #0284c7;
@@ -48,14 +48,6 @@
             text-align: center;
         }
 
-        .login-logo-area {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 20px;
-        }
-
         .brain-logo {
             width: 48px;
             height: 48px;
@@ -66,13 +58,13 @@
             align-items: center;
             color: white;
             font-size: 24px;
-            box-shadow: 0 2px 5px rgba(2, 132, 199, 0.3);
+            margin: 0 auto 15px auto;
         }
 
         .login-card h2 {
             color: var(--primary-color);
             font-size: 22px;
-            margin-bottom: 2px;
+            margin-bottom: 5px;
         }
 
         .login-card p {
@@ -93,7 +85,6 @@
             font-size: 13px;
             font-weight: 600;
             margin-bottom: 6px;
-            color: var(--text-main);
         }
 
         .form-group input {
@@ -124,20 +115,6 @@
 
         .btn:hover {
             background-color: var(--primary-dark);
-        }
-
-        .switch-link {
-            display: block;
-            margin-top: 14px;
-            font-size: 13px;
-            color: var(--primary-color);
-            text-decoration: none;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .switch-link:hover {
-            text-decoration: underline;
         }
 
         .dashboard-section {
@@ -190,7 +167,6 @@
             padding: 16px;
             border-radius: 8px;
             border: 1px solid var(--border-color);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
 
         .metric-card h3 {
@@ -202,7 +178,6 @@
         .metric-card .value {
             font-size: 22px;
             font-weight: 700;
-            color: var(--text-main);
         }
 
         .panel {
@@ -211,19 +186,14 @@
             border: 1px solid var(--border-color);
             padding: 20px;
             margin-bottom: 24px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
 
         .panel-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
             margin-bottom: 16px;
         }
 
         .panel-header h2 {
             font-size: 16px;
-            color: var(--text-main);
         }
 
         table {
@@ -244,10 +214,6 @@
             font-weight: 600;
         }
 
-        tr:hover {
-            background-color: #f8fafc;
-        }
-
         .badge {
             padding: 4px 8px;
             border-radius: 4px;
@@ -255,17 +221,10 @@
             font-weight: 600;
         }
 
-        .badge-busy { background-color: #fee2e2; color: #991b1b; }
         .badge-login { background-color: #dcfce7; color: #166534; }
-        .badge-call { background-color: #e0f2fe; color: #0369a1; }
         .badge-break { background-color: #fef3c7; color: #92400e; }
+        .badge-busy { background-color: #fee2e2; color: #991b1b; }
         .badge-logout { background-color: #f1f5f9; color: #64748b; }
-
-        .action-btns {
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-        }
 
         .btn-sm {
             padding: 4px 8px;
@@ -274,51 +233,19 @@
             border: none;
             cursor: pointer;
             font-weight: 600;
-        }
-
-        .agent-info-bar {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
-            background: #f8fafc;
-            padding: 16px;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-            margin-bottom: 20px;
-        }
-
-        .info-item label {
-            font-size: 12px;
-            color: var(--text-muted);
-            display: block;
-            margin-bottom: 4px;
-            text-transform: uppercase;
-        }
-
-        .info-item span {
-            font-size: 15px;
-            font-weight: 600;
-            color: var(--text-main);
-        }
-
-        .agent-controls {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-            margin-bottom: 20px;
+            background: var(--danger);
+            color: white;
         }
     </style>
 </head>
 <body>
 
-    <!-- ================= 1. ADMIN LOGIN ================= -->
+    <!-- ADMIN LOGIN SECTION -->
     <div id="admin-login-section" class="login-section">
         <div class="login-card">
-            <div class="login-logo-area">
-                <div class="brain-logo">🧠</div>
-                <h2>Mental Health Helpline</h2>
-                <p>Admin Control Portal</p>
-            </div>
+            <div class="brain-logo">🧠</div>
+            <h2>Mental Health Helpline</h2>
+            <p>Admin Control Dashboard</p>
             <form onsubmit="handleAdminLogin(event)">
                 <div class="form-group">
                     <label>Admin Username</label>
@@ -329,39 +256,15 @@
                     <input type="password" id="adminPass" placeholder="password" required>
                 </div>
                 <button type="submit" class="btn">Log in as Admin</button>
-                <a class="switch-link" href="#agent">Switch to Agent Portal URL</a>
             </form>
         </div>
     </div>
 
-    <!-- ================= 2. AGENT LOGIN ================= -->
-    <div id="agent-login-section" class="login-section" style="display: none;">
-        <div class="login-card">
-            <div class="login-logo-area">
-                <div class="brain-logo">🧠</div>
-                <h2>Mental Health Helpline</h2>
-                <p>Agent Portal Login</p>
-            </div>
-            <form onsubmit="handleAgentLogin(event)">
-                <div class="form-group">
-                    <label>Agent ID / Username</label>
-                    <input type="text" id="agentInputUser" placeholder="e.g. 2005" required autocomplete="off">
-                </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" id="agentInputPass" placeholder="password" required>
-                </div>
-                <button type="submit" class="btn" style="background-color: var(--success);">Log in as Agent</button>
-                <a class="switch-link" href="#admin">Switch to Admin Portal URL</a>
-            </form>
-        </div>
-    </div>
-
-    <!-- ================= 3. ADMIN DASHBOARD ================= -->
+    <!-- ADMIN DASHBOARD SECTION -->
     <div id="admin-dashboard-section" class="dashboard-section">
         <header>
             <div class="logo-area">
-                <div class="brain-logo">🧠</div>
+                <div class="brain-logo" style="margin:0; width:38px; height:38px; font-size:18px;">🧠</div>
                 <div class="logo-text">
                     <h1>Mental Health Helpline</h1>
                     <span>Admin Control Dashboard</span>
@@ -412,95 +315,10 @@
         </div>
     </div>
 
-    <!-- ================= 4. AGENT DASHBOARD ================= -->
-    <div id="agent-dashboard-section" class="dashboard-section">
-        <header>
-            <div class="logo-area">
-                <div class="brain-logo">🧠</div>
-                <div class="logo-text">
-                    <h1>Mental Health Helpline</h1>
-                    <span>Agent Control Dashboard</span>
-                </div>
-            </div>
-            <div>
-                <button class="btn" style="background-color: var(--danger); padding: 8px 16px;" onclick="handleLogout()">Logout</button>
-            </div>
-        </header>
-
-        <div class="main-container">
-            <div class="agent-info-bar">
-                <div class="info-item">
-                    <label>Agent Name</label>
-                    <span id="lblAgentName">-</span>
-                </div>
-                <div class="info-item">
-                    <label>Login Time & Date</label>
-                    <span id="lblLoginTime">-</span>
-                </div>
-                <div class="info-item">
-                    <label>Agent ID</label>
-                    <span id="lblAgentId">-</span>
-                </div>
-                <div class="info-item">
-                    <label>Current Status</label>
-                    <span id="lblAgentStatus" style="color: var(--success);">Online</span>
-                </div>
-            </div>
-
-            <div class="agent-controls">
-                <button class="btn" style="background-color: var(--success); width: auto;" onclick="setAgentStatus('Free / Available')">🟢 Free / Ready</button>
-                <button class="btn" style="background-color: var(--warning); width: auto;" onclick="setAgentStatus('On Break')">☕ Take a Break</button>
-                <button class="btn" style="background-color: var(--primary-color); width: auto;" onclick="setAgentStatus('Preview Mode')">👁️ Switch to Preview</button>
-                <button class="btn" style="background-color: var(--danger); width: auto;" onclick="setAgentStatus('Busy')">🔴 Set Busy</button>
-            </div>
-
-            <div class="panel">
-                <div class="panel-header"><h2>Call in Waiting Statistics</h2></div>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; text-align: center;">
-                    <div style="background:#f1f5f9; padding: 12px; border-radius:6px;"><b style="font-size:12px; color:var(--text-muted);">FA (Free Available)</b><br><span style="font-size:18px; font-weight:bold; color:var(--success);">1</span></div>
-                    <div style="background:#f1f5f9; padding: 12px; border-radius:6px;"><b style="font-size:12px; color:var(--text-muted);">BA (Busy Agents)</b><br><span style="font-size:18px; font-weight:bold; color:var(--danger);">2</span></div>
-                    <div style="background:#f1f5f9; padding: 12px; border-radius:6px;"><b style="font-size:12px; color:var(--text-muted);">WA (Waiting Calls)</b><br><span style="font-size:18px; font-weight:bold; color:var(--warning);">1</span></div>
-                    <div style="background:#f1f5f9; padding: 12px; border-radius:6px;"><b style="font-size:12px; color:var(--text-muted);">AB (Abandoned)</b><br><span style="font-size:18px; font-weight:bold; color:var(--text-muted);">1</span></div>
-                    <div style="background:#f1f5f9; padding: 12px; border-radius:6px;"><b style="font-size:12px; color:var(--text-muted);">AP (Answered)</b><br><span style="font-size:18px; font-weight:bold; color:var(--success);">0</span></div>
-                    <div style="background:#f1f5f9; padding: 12px; border-radius:6px;"><b style="font-size:12px; color:var(--text-muted);">NRA (Not Ready)</b><br><span style="font-size:18px; font-weight:bold; color:var(--text-muted);">1</span></div>
-                </div>
-            </div>
-
-            <div class="metrics-grid">
-                <div class="metric-card"><h3>Total Calls Taken</h3><div class="value" id="statTotalCalls">10</div></div>
-                <div class="metric-card"><h3>Break Duration</h3><div class="value" id="statBreakTime">25:02</div></div>
-                <div class="metric-card"><h3>Hold Time</h3><div class="value">10s</div></div>
-                <div class="metric-card"><h3>Wrapping Time</h3><div class="value">12s</div></div>
-            </div>
-
-            <div class="panel">
-                <div class="panel-header"><h2>Recent Calls Received</h2></div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Call ID</th>
-                            <th>Caller Number</th>
-                            <th>Time</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>#C-1092</td>
-                            <td>9911033821</td>
-                            <td>12:30 PM</td>
-                            <td><span class="badge badge-call">Connected / Received</span></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
     <script>
         let defaultAgents = [
-            { id: '2005', name: 'Aman Kumar', username: 'aman2005', password: 'password123', status: 'Free / Available', loginTime: '25/07/2026 10:01', totalCalls: 10, breakTime: '25:02' },
-            { id: '2006', name: 'Kajal', username: 'kajal2006', password: 'password123', status: 'On Break', loginTime: '25/07/2026 10:15', totalCalls: 6, breakTime: '10:00' }
+            { id: '2003', name: 'Nikhil', username: 'nikhil2003', password: 'password123', status: 'Logged Out', loginTime: '-', totalCalls: 0, breakTime: '00:00' },
+            { id: '2004', name: 'Aman', username: 'aman2004', password: 'password123', status: 'Logged Out', loginTime: '-', totalCalls: 0, breakTime: '00:00' }
         ];
 
         function getStoredAgents() {
@@ -513,40 +331,18 @@
         }
 
         window.onload = function() {
-            checkRoute();
+            checkAuth();
         };
 
-        window.onhashchange = function() {
-            checkRoute();
-        };
-
-        function checkRoute() {
-            let hash = window.location.hash;
-            let adminLoggedIn = localStorage.getItem('mhh_admin_logged') === 'true';
-            let agentLoggedIn = localStorage.getItem('mhh_agent_logged') === 'true';
-
-            // Hide all sections first
-            document.getElementById('admin-login-section').style.display = 'none';
-            document.getElementById('agent-login-section').style.display = 'none';
-            document.getElementById('admin-dashboard-section').style.display = 'none';
-            document.getElementById('agent-dashboard-section').style.display = 'none';
-
-            if (hash === '#admin') {
-                if (adminLoggedIn) {
-                    document.getElementById('admin-dashboard-section').style.display = 'block';
-                    renderAdminDashboard();
-                } else {
-                    document.getElementById('admin-login-section').style.display = 'flex';
-                }
-            } else if (hash === '#agent') {
-                if (agentLoggedIn) {
-                    document.getElementById('agent-dashboard-section').style.display = 'block';
-                    loadAgentWorkspace();
-                } else {
-                    document.getElementById('agent-login-section').style.display = 'flex';
-                }
+        function checkAuth() {
+            let isLoggedIn = localStorage.getItem('mhh_admin_logged') === 'true';
+            if (isLoggedIn) {
+                document.getElementById('admin-login-section').style.display = 'none';
+                document.getElementById('admin-dashboard-section').style.display = 'block';
+                renderAdminDashboard();
             } else {
-                window.location.hash = 'admin';
+                document.getElementById('admin-login-section').style.display = 'flex';
+                document.getElementById('admin-dashboard-section').style.display = 'none';
             }
         }
 
@@ -556,77 +352,15 @@
             const p = document.getElementById('adminPass').value.trim();
             if (u === 'admin' && p === 'password') {
                 localStorage.setItem('mhh_admin_logged', 'true');
-                checkRoute();
+                checkAuth();
             } else {
                 alert("Invalid Admin Username or Password! (Use admin / password)");
             }
         }
 
-        function handleAgentLogin(event) {
-            event.preventDefault();
-            const inputUser = document.getElementById('agentInputUser').value.trim();
-            const inputPass = document.getElementById('agentInputPass').value.trim();
-
-            let agents = getStoredAgents();
-            let agent = agents.find(a => (a.username === inputUser || a.id === inputUser) && a.password === inputPass);
-
-            if (agent) {
-                let now = new Date();
-                agent.loginTime = now.toLocaleDateString() + ' ' + now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-                agent.status = 'Free / Available';
-                localStorage.setItem('mhh_agents', JSON.stringify(agents));
-
-                localStorage.setItem('mhh_agent_logged', 'true');
-                localStorage.setItem('mhh_current_agent_id', agent.id);
-                checkRoute();
-            } else {
-                alert("Invalid Agent ID or Password!");
-            }
-        }
-
         function handleLogout() {
-            let hash = window.location.hash;
-            if (hash === '#agent') {
-                let agentId = localStorage.getItem('mhh_current_agent_id');
-                let agents = getStoredAgents();
-                let agent = agents.find(a => a.id === agentId);
-                if(agent) {
-                    agent.status = 'Logged Out';
-                    localStorage.setItem('mhh_agents', JSON.stringify(agents));
-                }
-                localStorage.removeItem('mhh_agent_logged');
-                localStorage.removeItem('mhh_current_agent_id');
-            } else if (hash === '#admin') {
-                localStorage.removeItem('mhh_admin_logged');
-            }
-            checkRoute();
-        }
-
-        function loadAgentWorkspace() {
-            let agentId = localStorage.getItem('mhh_current_agent_id');
-            let agents = getStoredAgents();
-            let agent = agents.find(a => a.id === agentId);
-
-            if (agent) {
-                document.getElementById('lblAgentName').innerText = agent.name;
-                document.getElementById('lblLoginTime').innerText = agent.loginTime || '-';
-                document.getElementById('lblAgentId').innerText = agent.id;
-                document.getElementById('lblAgentStatus').innerText = agent.status;
-                document.getElementById('statTotalCalls').innerText = agent.totalCalls || 0;
-                document.getElementById('statBreakTime').innerText = agent.breakTime || '00:00';
-            }
-        }
-
-        function setAgentStatus(statusText) {
-            let agentId = localStorage.getItem('mhh_current_agent_id');
-            let agents = getStoredAgents();
-            let agent = agents.find(a => a.id === agentId);
-            if (agent) {
-                agent.status = statusText;
-                localStorage.setItem('mhh_agents', JSON.stringify(agents));
-                document.getElementById('lblAgentStatus').innerText = statusText;
-                alert(`Status successfully updated to: ${statusText}`);
-            }
+            localStorage.removeItem('mhh_admin_logged');
+            checkAuth();
         }
 
         function renderAdminDashboard() {
@@ -647,7 +381,7 @@
 
                 let badge = 'badge-login';
                 if(agent.status === 'On Break') badge = 'badge-break';
-                if(agent.status === 'Busy') badge = 'badge-busy';
+                if(agent.status === 'Busy' || agent.status === 'On Call') badge = 'badge-busy';
                 if(agent.status === 'Logged Out') badge = 'badge-logout';
 
                 tbody.innerHTML += `
@@ -660,9 +394,7 @@
                         <td>${agent.totalCalls || 0}</td>
                         <td>${agent.breakTime || '00:00'}</td>
                         <td>
-                            <div class="action-btns">
-                                <button class="btn-sm" style="background:var(--danger); color:white;" onclick="deleteAgent('${agent.id}')">Delete</button>
-                            </div>
+                            <button class="btn-sm" onclick="deleteAgent('${agent.id}')">Delete</button>
                         </td>
                     </tr>
                 `;
