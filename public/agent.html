@@ -21,6 +21,7 @@
         .btn-preview { background: #ffc107; color: #333; }
         .btn-break { background: #ff9800; }
         .btn-active { background: #4caf50; }
+        .btn-busy { background: #f44336; }
         .stats-box { background: #e3f2fd; padding: 15px; border-radius: 6px; font-weight: bold; }
     </style>
 </head>
@@ -46,9 +47,10 @@
             <div class="info-box"><strong>Current Status:</strong> <span id="agentStatus" style="color: green; font-weight: bold;">Active / Available</span></div>
         </div>
         <div class="btn-group">
-            <button class="action-btn btn-preview" onclick="togglePreview()">Switch to Preview Mode</button>
-            <button class="action-btn btn-break" onclick="toggleBreak()">Want to Take a Break</button>
-            <button class="action-btn btn-active" onclick="setAvailable()">Set Available</button>
+            <button class="action-btn btn-preview" onclick="setStatus('Preview Mode', '#ff9800')">Switch to Preview Mode</button>
+            <button class="action-btn btn-break" onclick="setStatus('On Break ☕', '#ff5722')">Want to Take a Break</button>
+            <button class="action-btn btn-active" onclick="setStatus('Active / Available', 'green')">Set Available</button>
+            <button class="action-btn btn-busy" onclick="setStatus('Busy / On Call', '#f44336')">Set Busy</button>
         </div>
     </div>
 
@@ -79,6 +81,17 @@
     </div>
 
     <script>
+        // Load logged in agent info if passed from login page
+        const loggedUser = localStorage.getItem('currentAgentName');
+        const loggedId = localStorage.getItem('currentAgentId');
+
+        if (loggedUser) {
+            document.getElementById('agentName').innerText = loggedUser;
+        }
+        if (loggedId) {
+            document.getElementById('agentId').innerText = loggedId;
+        }
+
         if (!localStorage.getItem('agentLoginTime')) {
             const now = new Date();
             const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' ' + now.toLocaleDateString();
@@ -99,32 +112,21 @@
 
         syncToAdmin('Active / Available');
 
-        function togglePreview() {
-            document.getElementById('agentStatus').innerText = 'Preview Mode';
-            document.getElementById('agentStatus').style.color = '#ff9800';
-            syncToAdmin('Preview Mode');
-            alert('Switched to Preview Mode');
-        }
-
-        function toggleBreak() {
-            document.getElementById('agentStatus').innerText = 'On Break ☕';
-            document.getElementById('agentStatus').style.color = '#ff5722';
-            syncToAdmin('On Break');
-            alert('Break started. Admin panel updated.');
-        }
-
-        function setAvailable() {
-            document.getElementById('agentStatus').innerText = 'Active / Available';
-            document.getElementById('agentStatus').style.color = 'green';
-            syncToAdmin('Active / Available');
-            alert('Status set to Available');
+        function setStatus(statusText, color) {
+            const statusEl = document.getElementById('agentStatus');
+            statusEl.innerText = statusText;
+            statusEl.style.color = color;
+            syncToAdmin(statusText);
+            alert('Status updated to: ' + statusText);
         }
 
         function logoutAgent() {
             syncToAdmin('Logged Out');
             localStorage.removeItem('agentLoginTime');
+            localStorage.removeItem('currentAgentName');
+            localStorage.removeItem('currentAgentId');
             alert('Agent Logged Out Successfully');
-            window.location.href = 'index.html';
+            window.location.href = 'login.html'; // Assuming you have a login page
         }
     </script>
 </body>
